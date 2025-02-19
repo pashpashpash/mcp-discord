@@ -1,11 +1,10 @@
 # Discord MCP Server
 
-[![smithery badge](https://smithery.ai/badge/@hanweg/mcp-discord)](https://smithery.ai/server/@hanweg/mcp-discord)
 A Model Context Protocol (MCP) server that provides Discord integration capabilities to MCP clients like Claude Desktop.
 
 <a href="https://glama.ai/mcp/servers/wvwjgcnppa"><img width="380" height="200" src="https://glama.ai/mcp/servers/wvwjgcnppa/badge" alt="mcp-discord MCP server" /></a>
 
-## Available Tools
+## Features
 
 ### Server Information
 - `get_server_info`: Get detailed server information
@@ -34,17 +33,9 @@ A Model Context Protocol (MCP) server that provides Discord integration capabili
 - `modify_webhook`: Update webhook settings
 - `delete_webhook`: Delete a webhook
 
-## Installation
+## Prerequisites
 
-### Installing via Smithery
-
-To install Discord Server for Claude Desktop automatically via [Smithery](https://smithery.ai/server/@hanweg/mcp-discord):
-
-```bash
-npx -y @smithery/cli install @hanweg/mcp-discord --client claude
-```
-
-1. Set up your Discord bot:
+1. **Set up your Discord bot**:
    - Create a new application at [Discord Developer Portal](https://discord.com/developers/applications)
    - Create a bot and copy the token
    - Enable required privileged intents:
@@ -53,38 +44,83 @@ npx -y @smithery/cli install @hanweg/mcp-discord --client claude
      - SERVER MEMBERS INTENT
    - Invite the bot to your server using OAuth2 URL Generator
 
-2. Clone and install the package:
-```bash
-# Clone the repository
-git clone https://github.com/hanweg/mcp-discord.git
-cd mcp-discord
+2. **Python Requirements**:
+   - Python 3.8 or higher
+   - pip (Python package installer)
 
-# Create and activate virtual environment
-uv venv
-.venv\Scripts\activate
+## Installation
 
-### If using Python 3.13+ - install audioop library: `uv pip install audioop-lts`
+1. **Clone the Repository**:
+   ```bash
+   git clone https://github.com/pashpashpash/mcp-discord.git
+   cd mcp-discord
+   ```
 
-# Install the package
-uv pip install -e .
-```
+2. **Create and Activate Virtual Environment**:
+   ```bash
+   # On Windows
+   python -m venv venv
+   venv\Scripts\activate
 
-3. Configure Claude Desktop (`%APPDATA%\Claude\claude_desktop_config.json` on Windows, `~/Library/Application Support/Claude/claude_desktop_config.json` on macOS):
+   # On macOS/Linux
+   python -m venv venv
+   source venv/bin/activate
+   ```
+
+3. **Install Dependencies**:
+   ```bash
+   pip install -e .
+   ```
+   Note: If using Python 3.13+, also install audioop: `pip install audioop-lts`
+
+4. **Configure Claude Desktop**:
+
+Add this to your claude_desktop_config.json:
+- macOS: `~/Library/Application Support/Claude/claude_desktop_config.json`
+- Windows: `%APPDATA%/Claude/claude_desktop_config.json`
+
 ```json
+{
+  "mcpServers": {
     "discord": {
-      "command": "uv",
-      "args": [
-        "--directory",
-        "C:\\PATH\\TO\\mcp-discord",
-        "run",
-        "mcp-discord"
-      ],
+      "command": "python",
+      "args": ["-m", "mcp_discord"],
+      "cwd": "path/to/mcp-discord",
       "env": {
         "DISCORD_TOKEN": "your_bot_token"
       }
     }
+  }
+}
 ```
+Note: 
+- Replace "path/to/mcp-discord" with the actual path to your cloned repository
+- Replace "your_bot_token" with your Discord bot token
+
+## Debugging
+
+If you run into issues, check Claude Desktop's MCP logs:
+```bash
+tail -n 20 -f ~/Library/Logs/Claude/mcp*.log
+```
+
+Common issues:
+1. **Token Errors**:
+   - Verify your Discord bot token is correct
+   - Check that all required intents are enabled
+
+2. **Permission Issues**:
+   - Ensure the bot has proper permissions in your Discord server
+   - Verify the bot's role hierarchy for role management commands
+
+3. **Installation Issues**:
+   - Make sure you're using the correct Python version
+   - Try recreating the virtual environment
+   - Check that all dependencies are installed correctly
 
 ## License
 
 MIT License - see LICENSE file for details.
+
+---
+Note: This is a fork of the [original mcp-discord repository](https://github.com/hanweg/mcp-discord).
