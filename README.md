@@ -84,7 +84,7 @@ Add this to your claude_desktop_config.json:
   "mcpServers": {
     "discord": {
       "command": "python",
-      "args": ["-m", "mcp_discord"],
+      "args": ["-m", "mcp-discord"],
       "cwd": "path/to/mcp-discord",
       "env": {
         "DISCORD_TOKEN": "your_bot_token"
